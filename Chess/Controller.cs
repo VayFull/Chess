@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Serialization;
 using Chess.Properties;
 
 namespace Chess
@@ -53,7 +51,7 @@ namespace Chess
 
         public static void Initializer()
         {
-
+            var label = new Label(); //Кто ходит?
             form.Size = new Size(1920, 1080);
             form.FormBorderStyle = FormBorderStyle.None;
             form.WindowState = FormWindowState.Maximized;
@@ -88,10 +86,7 @@ namespace Chess
                 if (FieldOfFigures[x, y] == null) FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
             }
 
-            foreach (var element in FieldOfFigures)
-            { 
-                element.UpdateList(FieldOfFigures);
-            }
+            foreach (var element in FieldOfFigures) element.UpdateList(FieldOfFigures);
 
             Thread.Sleep(50);
         }
@@ -114,7 +109,6 @@ namespace Chess
             image.Click += Image_Click;
         }
 
-        
 
         public override void UpdateList(Figure[,] figures)
         {
@@ -122,37 +116,26 @@ namespace Chess
             var x = (CurrPosition.X - 550) / 100;
             var y = (CurrPosition.Y - 130) / 100;
 
-            if (site == Site.Black)//для черных
+            if (site == Site.Black) //для черных
             {
                 if (y == 1) //для старта
                 {
-                    if (figures[x, y+1].condition == Condition.NotFigure)
-                    {
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y+100));
-                    }
-                    if (figures[x, y + 2].condition == Condition.NotFigure)
-                    {
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 200));
-                    }
-                }
-                if (y != 7 && y != 1) //для обычного случая
-                {
                     if (figures[x, y + 1].condition == Condition.NotFigure)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                    }
+                    if (figures[x, y + 2].condition == Condition.NotFigure)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 200));
                 }
+
+                if (y != 7 && y != 1) //для обычного случая
+                    if (figures[x, y + 1].condition == Condition.NotFigure)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
 
                 if (y != 7) //Для атаки
                 {
-                    if (x !=7 && figures[x + 1, y + 1].site == Site.White)
-                    {
-                        AvailablePoints.Add(new Point(CurrPosition.X+100, CurrPosition.Y + 100));
-                    }
+                    if (x != 7 && figures[x + 1, y + 1].site == Site.White)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
                     if (x != 0 && figures[x - 1, y + 1].site == Site.White)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                    }
                 }
             }
 
@@ -161,35 +144,68 @@ namespace Chess
                 if (y == 6) //для старта
                 {
                     if (figures[x, y - 1].condition == Condition.NotFigure)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                    }
                     if (figures[x, y - 2].condition == Condition.NotFigure)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 200));
-                    }
                 }
+
                 if (y != 6 && y != 0) //для обычного случая
-                {
                     if (figures[x, y - 1].condition == Condition.NotFigure)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                    }
-                }
 
                 if (y != 0) //Для атаки
                 {
                     if (x != 7 && figures[x + 1, y - 1].site == Site.Black)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                    }
                     if (x != 0 && figures[x - 1, y - 1].site == Site.Black)
-                    {
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                    }
                 }
             }
         } //метод, который позволяет получить текущий лист доступных ходов
+        public void Image_Click(object sender, EventArgs e)
+        {
+            if (Controller.IsWhiteTurn && site == Site.White)
+            {
+                foreach (var element in Controller.FieldOfFigures) element.UpdateList(Controller.FieldOfFigures);
+                var rnd = new Random().Next(AvailablePoints.Count);
+                if (AvailablePoints.Count != 0)
+                {
+                    var x = (CurrPosition.X - 550) / 100;
+                    var y = (CurrPosition.Y - 130) / 100;
+                    var newX = (AvailablePoints[rnd].X - 550) / 100;
+                    var newY = (AvailablePoints[rnd].Y - 130) / 100;
+                    if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
+                        Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
+                    Controller.form.Controls.Remove(image);
+                    Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
+                    Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                    Controller.IsWhiteTurn = false;
+                }
+            }
+            else
+            {
+                if (Controller.IsWhiteTurn == false && site == Site.Black)
+                {
+                    foreach (var element in Controller.FieldOfFigures) element.UpdateList(Controller.FieldOfFigures);
+                    var rnd = new Random().Next(AvailablePoints.Count);
+                    if (AvailablePoints.Count != 0)
+                    {
+                        var x = (CurrPosition.X - 550) / 100;
+                        var y = (CurrPosition.Y - 130) / 100;
+                        var newX = (AvailablePoints[rnd].X - 550) / 100;
+                        var newY = (AvailablePoints[rnd].Y - 130) / 100;
+                        if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
+                            Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
+                        Controller.form.Controls.Remove(image);
+                        Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
+                        Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                        Controller.IsWhiteTurn = true;
+                    }
+                }
+            }
+        }
     }
 
     public class Horse : Figure
@@ -205,6 +221,51 @@ namespace Chess
             condition = Condition.Horse;
             Controller.list.Add(image);
             this.site = site;
+        }
+
+        public override void UpdateList(Figure[,] figures)
+        {
+            var x = (CurrPosition.X - 550) / 100;
+            var y = (CurrPosition.Y - 130) / 100;
+
+            if (y == 0) //для самой верхней строки
+            {
+                if (x == 0)
+                {
+                    AvailablePoints.Add(new Point(2,1));
+                    AvailablePoints.Add(new Point(1,2));
+                }
+
+                if (x == 7)
+                {
+                    AvailablePoints.Add(new Point(5, 1));
+                    AvailablePoints.Add(new Point(6, 2));
+                }
+
+                if (x == 1)
+                {
+                    AvailablePoints.Add(new Point(0,2));
+                    AvailablePoints.Add(new Point(2, 2));
+                    AvailablePoints.Add(new Point(3, 1));
+                }
+
+                if (x == 6)
+                {
+                    AvailablePoints.Add(new Point(7, 2));
+                    AvailablePoints.Add(new Point(5, 2));
+                    AvailablePoints.Add(new Point(4, 1));
+                }
+
+                if (x != 0 && x != 1 && x != 6 && x != 7)
+                {
+                    AvailablePoints.Add(new Point(x-2, y+1));
+                    AvailablePoints.Add(new Point(x+2, y+1));
+                    AvailablePoints.Add(new Point(x+1, y+2));
+                    AvailablePoints.Add(new Point(x-1, y+2));
+                }
+            }
+
+
         }
     }
 
@@ -238,7 +299,6 @@ namespace Chess
             Controller.list.Add(image);
             this.site = site;
         }
-
     }
 
     public class Queen : Figure
@@ -255,7 +315,6 @@ namespace Chess
             Controller.list.Add(image);
             this.site = site;
         }
-
     }
 
     public class King : Figure
@@ -284,62 +343,6 @@ namespace Chess
 
         public virtual void UpdateList(Figure[,] figures)
         {
-
-        }
-
-        public void Image_Click(object sender, System.EventArgs e)
-        {
-            if (Controller.IsWhiteTurn && site == Site.White)
-            {
-                foreach (var element in Controller.FieldOfFigures)
-                {
-                    element.UpdateList(Controller.FieldOfFigures);
-                }
-                var rnd = new Random().Next(AvailablePoints.Count);
-                if (AvailablePoints.Count != 0)
-                {
-                    var x = (CurrPosition.X - 550) / 100;
-                    var y = (CurrPosition.Y - 130) / 100;
-                    var newX = (AvailablePoints[rnd].X - 550) / 100;
-                    var newY = (AvailablePoints[rnd].Y - 130) / 100;
-                    if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
-                    {
-                        Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
-                    }
-                    Controller.form.Controls.Remove(image);
-                    Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
-                    Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
-                    Controller.IsWhiteTurn = false;
-                }
-            }
-            else
-            {
-                if (Controller.IsWhiteTurn == false && site == Site.Black)
-                {
-                    foreach (var element in Controller.FieldOfFigures)
-                    {
-                        element.UpdateList(Controller.FieldOfFigures);
-                    }
-                    var rnd = new Random().Next(AvailablePoints.Count);
-                    if (AvailablePoints.Count != 0)
-                    {
-                        var x = (CurrPosition.X - 550) / 100;
-                        var y = (CurrPosition.Y - 130) / 100;
-                        var newX = (AvailablePoints[rnd].X - 550) / 100;
-                        var newY = (AvailablePoints[rnd].Y - 130) / 100;
-                        if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
-                        {
-                            Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
-                        }
-                        Controller.form.Controls.Remove(image);
-                        Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
-                        Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
-                        Controller.IsWhiteTurn = true;
-                    }
-                }
-            }
         }
     }
 }
