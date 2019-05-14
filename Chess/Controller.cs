@@ -121,9 +121,11 @@ namespace Chess
                 if (y == 1) //для старта
                 {
                     if (figures[x, y + 1].condition == Condition.NotFigure)
+                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                    if (figures[x, y + 2].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 200));
+                        if (figures[x, y + 2].condition == Condition.NotFigure)
+                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 200));
+                    }   
                 }
 
                 if (y != 7 && y != 1) //для обычного случая
@@ -132,7 +134,7 @@ namespace Chess
 
                 if (y != 7) //Для атаки
                 {
-                    if (x != 7 && figures[x + 1, y + 1].site == Site.White)
+                    if (x != 7 && figures[x + 1, y + 1].site == Site.White) { }
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
                     if (x != 0 && figures[x - 1, y + 1].site == Site.White)
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
@@ -144,9 +146,11 @@ namespace Chess
                 if (y == 6) //для старта
                 {
                     if (figures[x, y - 1].condition == Condition.NotFigure)
+                    {
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                    if (figures[x, y - 2].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 200));
+                        if (figures[x, y - 2].condition == Condition.NotFigure)
+                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 200));
+                    }
                 }
 
                 if (y != 6 && y != 0) //для обычного случая
