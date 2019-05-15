@@ -55,12 +55,12 @@ namespace Chess
         public static void Initializer()
         {
             label = new Label(); //Кто ходит?
-            label.Location=new Point(1920/2,30);
-            label.Size=new Size(120,20);
+            label.Location = new Point(1920 / 2, 30);
+            label.Size = new Size(120, 20);
             label.Text = "Ход белых";
-            EndGameText=new Label();
-            EndGameText.Location=new Point(1920/2,1080/2);
-            EndGameText.Size=new Size(100,100);
+            EndGameText = new Label();
+            EndGameText.Location = new Point(1920 / 2, 1080 / 2);
+            EndGameText.Size = new Size(100, 100);
             EndGameText.Hide();
             EndGameText.ForeColor = Color.YellowGreen;
             EndGameText.BackColor = Color.Brown;
@@ -195,10 +195,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -221,10 +218,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -581,10 +575,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -607,10 +598,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -721,10 +709,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -747,10 +732,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -850,10 +832,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -876,10 +855,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -1040,10 +1016,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -1066,10 +1039,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -1107,12 +1077,12 @@ namespace Chess
             {
                 if (x == 0)
                 {
-                    if (figures[x, y+1].site != site)
+                    if (figures[x, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                    if (figures[x+1,y].site != site)
-                        AvailablePoints.Add(new Point(CurrPosition.X+100, CurrPosition.Y));
-                    if (figures[x + 1, y+1].site != site)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y+100));
+                    if (figures[x + 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
+                    if (figures[x + 1, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
                 }
 
                 if (x == 7)
@@ -1138,7 +1108,6 @@ namespace Chess
                     if (figures[x - 1, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
                 }
-                
             }
 
             if (y == 7)
@@ -1178,8 +1147,7 @@ namespace Chess
                 }
             }
 
-            if (x == 0&&y!=0&&y!=7)
-            {
+            if (x == 0 && y != 0 && y != 7)
                 if (y >= 1 && y <= 6)
                 {
                     if (figures[x, y - 1].site != site)
@@ -1193,10 +1161,8 @@ namespace Chess
                     if (figures[x + 1, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
                 }
-            }
 
             if (x == 7 && y != 0 && y != 7)
-            {
                 if (y >= 1 && y <= 6)
                 {
                     if (figures[x, y - 1].site != site)
@@ -1210,7 +1176,6 @@ namespace Chess
                     if (figures[x - 1, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
                 }
-            }
 
             if (x >= 1 && x <= 6 && y >= 1 && y <= 6)
             {
@@ -1230,7 +1195,6 @@ namespace Chess
                     AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
                 if (figures[x + 1, y + 1].site != site)
                     AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-
             }
         }
 
@@ -1249,10 +1213,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
-                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                    {
-                        GameEnd();
-                    }
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -1275,10 +1236,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
-                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
-                        {
-                            GameEnd();
-                        }
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
@@ -1304,18 +1262,12 @@ namespace Chess
 
         public void GameEnd()
         {
-            if (site == Site.Black)
-            {
-                Controller.EndGameText.Text = "Победа черных";
-            }
+            if (site == Site.Black) Controller.EndGameText.Text = "Победа черных";
 
-            if (site == Site.White)
-            {
-                Controller.EndGameText.Text = "Победа белых";
-            }
+            if (site == Site.White) Controller.EndGameText.Text = "Победа белых";
 
             Controller.EndGameText.Show();
-            Timer timer=new Timer();
+            var timer = new Timer();
             timer.Tick += Timer_Tick;
             timer.Interval = 2000;
             timer.Start();
