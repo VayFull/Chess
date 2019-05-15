@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Chess.Properties;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Chess
 {
@@ -48,10 +49,23 @@ namespace Chess
         public static List<Button> list = new List<Button>();
         public static Form form;
         public static Figure[,] FieldOfFigures = new Figure[8, 8];
+        public static Label label;
+        public static Label EndGameText;
 
         public static void Initializer()
         {
-            var label = new Label(); //Кто ходит?
+            label = new Label(); //Кто ходит?
+            label.Location=new Point(1920/2,30);
+            label.Size=new Size(120,20);
+            label.Text = "Ход белых";
+            EndGameText=new Label();
+            EndGameText.Location=new Point(1920/2,1080/2);
+            EndGameText.Size=new Size(100,100);
+            EndGameText.Hide();
+            EndGameText.ForeColor = Color.YellowGreen;
+            EndGameText.BackColor = Color.Brown;
+            form.Controls.Add(EndGameText);
+            form.Controls.Add(label);
             form.Size = new Size(1920, 1080);
             form.FormBorderStyle = FormBorderStyle.None;
             form.WindowState = FormWindowState.Maximized;
@@ -181,10 +195,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -202,10 +221,15 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
@@ -557,10 +581,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -578,10 +607,15 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
@@ -610,15 +644,16 @@ namespace Chess
             var x = (CurrPosition.X - 550) / 100;
             var y = (CurrPosition.Y - 130) / 100;
 
-            int currPosX = x;
-            int currPosY = y;
+            var currPosX = x;
+            var currPosY = y;
 
-            int iterations = 0;
+            var iterations = 0;
 
-            while (currPosX != 7 && currPosY != 7 && figures[currPosX + 1, currPosY + 1].site != site) //в правый нижний угол
+            while (currPosX != 7 && currPosY != 7 && figures[currPosX + 1, currPosY + 1].site != site
+            ) //в правый нижний угол
             {
                 iterations++;
-                AvailablePoints.Add(new Point(CurrPosition.X+iterations*100,CurrPosition.Y+iterations*100));
+                AvailablePoints.Add(new Point(CurrPosition.X + iterations * 100, CurrPosition.Y + iterations * 100));
                 if (figures[currPosX + 1, currPosY + 1].condition != Condition.NotFigure &&
                     figures[currPosX + 1, currPosY + 1].site != site) break;
                 currPosX++;
@@ -629,7 +664,8 @@ namespace Chess
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 0 && currPosY != 0 && figures[currPosX - 1, currPosY - 1].site != site) //в левый верхний угол
+            while (currPosX != 0 && currPosY != 0 && figures[currPosX - 1, currPosY - 1].site != site
+            ) //в левый верхний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X - iterations * 100, CurrPosition.Y - iterations * 100));
@@ -643,7 +679,8 @@ namespace Chess
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 7 && currPosY != 0 && figures[currPosX + 1, currPosY - 1].site != site) //в правый верхний угол
+            while (currPosX != 7 && currPosY != 0 && figures[currPosX + 1, currPosY - 1].site != site
+            ) //в правый верхний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X + iterations * 100, CurrPosition.Y - iterations * 100));
@@ -652,11 +689,13 @@ namespace Chess
                 currPosX++;
                 currPosY--;
             }
+
             iterations = 0;
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 0 && currPosY != 7 && figures[currPosX - 1, currPosY + 1].site != site) //в левый нижний угол
+            while (currPosX != 0 && currPosY != 7 && figures[currPosX - 1, currPosY + 1].site != site
+            ) //в левый нижний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X - iterations * 100, CurrPosition.Y + iterations * 100));
@@ -682,10 +721,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -703,16 +747,19 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
         }
-
-
     }
 
     public class Rook : Figure
@@ -803,10 +850,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -824,10 +876,15 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
@@ -856,12 +913,13 @@ namespace Chess
             var x = (CurrPosition.X - 550) / 100;
             var y = (CurrPosition.Y - 130) / 100;
 
-            int currPosX = x;
-            int currPosY = y;
+            var currPosX = x;
+            var currPosY = y;
 
-            int iterations = 0;
+            var iterations = 0;
 
-            while (currPosX != 7 && currPosY != 7 && figures[currPosX + 1, currPosY + 1].site != site) //в правый нижний угол
+            while (currPosX != 7 && currPosY != 7 && figures[currPosX + 1, currPosY + 1].site != site
+            ) //в правый нижний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X + iterations * 100, CurrPosition.Y + iterations * 100));
@@ -875,7 +933,8 @@ namespace Chess
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 0 && currPosY != 0 && figures[currPosX - 1, currPosY - 1].site != site) //в левый верхний угол
+            while (currPosX != 0 && currPosY != 0 && figures[currPosX - 1, currPosY - 1].site != site
+            ) //в левый верхний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X - iterations * 100, CurrPosition.Y - iterations * 100));
@@ -889,7 +948,8 @@ namespace Chess
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 7 && currPosY != 0 && figures[currPosX + 1, currPosY - 1].site != site) //в правый верхний угол
+            while (currPosX != 7 && currPosY != 0 && figures[currPosX + 1, currPosY - 1].site != site
+            ) //в правый верхний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X + iterations * 100, CurrPosition.Y - iterations * 100));
@@ -898,11 +958,13 @@ namespace Chess
                 currPosX++;
                 currPosY--;
             }
+
             iterations = 0;
             currPosX = x;
             currPosY = y;
 
-            while (currPosX != 0 && currPosY != 7 && figures[currPosX - 1, currPosY + 1].site != site) //в левый нижний угол
+            while (currPosX != 0 && currPosY != 7 && figures[currPosX - 1, currPosY + 1].site != site
+            ) //в левый нижний угол
             {
                 iterations++;
                 AvailablePoints.Add(new Point(CurrPosition.X - iterations * 100, CurrPosition.Y + iterations * 100));
@@ -912,8 +974,8 @@ namespace Chess
                 currPosY++;
             }
 
-            int currXValue = x;
-            int currYValue = y;
+            var currXValue = x;
+            var currYValue = y;
 
             iterations = 0;
 
@@ -978,10 +1040,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -999,10 +1066,15 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
+                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
@@ -1030,236 +1102,135 @@ namespace Chess
             AvailablePoints.Clear();
             var x = (CurrPosition.X - 550) / 100;
             var y = (CurrPosition.Y - 130) / 100;
-            if (site == Site.Black)
+
+            if (y == 0)
             {
-                for (var a = 1; a <= 6; a++)
-                    if (x == a && y == 0)
-                    {
-                        if (figures[x - 1, y].site != Site.Black && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                        if (figures[x + 1, y].site != Site.Black && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                        if (figures[x, y + 1].site != Site.Black && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x - 1, y + 1].site != Site.Black &&
-                            figures[x - 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                        if (figures[x + 1, y + 1].site != Site.Black &&
-                            figures[x + 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == 0 && y == a)
-                    {
-                        if (figures[x, y - 1].site != Site.Black && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x, y + 1].site != Site.Black && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x + 1, y - 1].site != Site.Black &&
-                            figures[x + 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                        if (figures[x + 1, y + 1].site != Site.Black &&
-                            figures[x + 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                        if (figures[x + 1, y].site != Site.Black && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == a && y == 7)
-                    {
-                        if (figures[x - 1, y].site != Site.Black && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                        if (figures[x + 1, y].site != Site.Black && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                        if (figures[x, y - 1].site != Site.Black && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x - 1, y - 1].site != Site.Black &&
-                            figures[x - 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                        if (figures[x + 1, y - 1].site != Site.Black &&
-                            figures[x + 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == 7 && y == a)
-                    {
-                        if (figures[x, y - 1].site != Site.Black && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x, y + 1].site != Site.Black && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x - 1, y - 1].site != Site.Black &&
-                            figures[x - 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                        if (figures[x - 1, y + 1].site != Site.Black &&
-                            figures[x - 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                        if (figures[x - 1, y].site != Site.Black && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new
-                                Point(CurrPosition.X - 100, CurrPosition.Y));
-                    }
-
-                if (figures[x = 0, y = 0].site != Site.Black)
+                if (x == 0)
                 {
-                    if (figures[x + 1, y].site != Site.Black && figures[x + 1, y].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    if (figures[x + 1, y + 1].site != Site.Black &&
-                        figures[x + 1, y + 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                    if (figures[x, y + 1].site != Site.Black && figures[x, y + 1].condition == Condition.NotFigure)
+                    if (figures[x, y+1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
+                    if (figures[x+1,y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X+100, CurrPosition.Y));
+                    if (figures[x + 1, y+1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y+100));
                 }
 
-                if (figures[x = 7, y = 0].site != Site.Black)
+                if (x == 7)
                 {
-                    if (figures[x - 1, y].site != Site.Black && figures[x - 1, y].condition == Condition.NotFigure)
+                    if (figures[x, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
+                    if (figures[x - 1, y].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                    if (figures[x - 1, y + 1].site != Site.Black &&
-                        figures[x - 1, y + 1].condition == Condition.NotFigure)
+                    if (figures[x - 1, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                    if (figures[x, y + 1].site != Site.Black && figures[x, y + 1].condition == Condition.NotFigure)
+                }
+
+                if (x >= 1 && x <= 6)
+                {
+                    if (figures[x, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                }
-
-                if (figures[x = 0, y = 7].site != Site.Black)
-                {
-                    if (figures[x + 1, y].site != Site.Black && figures[x + 1, y].condition == Condition.NotFigure)
+                    if (figures[x + 1, y].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    if (figures[x + 1, y - 1].site != Site.Black &&
-                        figures[x + 1, y - 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                    if (figures[x, y - 1].site != Site.Black && figures[x, y - 1].condition == Condition.NotFigure)
+                    if (figures[x + 1, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
+                    if (figures[x - 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
+                    if (figures[x - 1, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
+                }
+                
+            }
+
+            if (y == 7)
+            {
+                if (x == 0)
+                {
+                    if (figures[x, y - 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x + 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
+                    if (figures[x + 1, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
                 }
 
-                if (figures[x = 7, y = 7].site != Site.Black)
+                if (x == 7)
                 {
-                    if (figures[x - 1, y].site != Site.Black && figures[x - 1, y].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                    if (figures[x - 1, y - 1].site != Site.Black &&
-                        figures[x - 1, y - 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                    if (figures[x, y - 1].site != Site.Black && figures[x, y - 1].condition == Condition.NotFigure)
+                    if (figures[x, y - 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x - 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
+                    if (figures[x - 1, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
+                }
+
+                if (x >= 1 && x <= 6)
+                {
+                    if (figures[x, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x + 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
+                    if (figures[x + 1, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
+                    if (figures[x - 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
+                    if (figures[x - 1, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
                 }
             }
 
-            if (site == Site.White)
+            if (x == 0&&y!=0&&y!=7)
             {
-                for (var a = 1; a <= 6; a++)
-                    if (x == a && y == 0)
-                    {
-                        if (figures[x - 1, y].site != Site.White && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                        if (figures[x + 1, y].site != Site.White && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                        if (figures[x, y + 1].site != Site.White && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x - 1, y + 1].site != Site.White &&
-                            figures[x - 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                        if (figures[x + 1, y + 1].site != Site.White &&
-                            figures[x + 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == 0 && y == a)
-                    {
-                        if (figures[x, y - 1].site != Site.White && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x, y + 1].site != Site.White && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x + 1, y - 1].site != Site.White &&
-                            figures[x + 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y -
-                                                                                100));
-                        if (figures[x + 1, y + 1].site != Site.White &&
-                            figures[x + 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                        if (figures[x + 1, y].site != Site.White && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == a && y == 7)
-                    {
-                        if (figures[x - 1, y].site != Site.White && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                        if (figures[x + 1, y].site != Site.White && figures[x + 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                        if (figures[x, y - 1].site != Site.White && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x - 1, y - 1].site != Site.White &&
-                            figures[x - 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                        if (figures[x + 1, y - 1].site != Site.White &&
-                            figures[x + 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                    }
-
-                for (var a = 1; a <= 6; a++)
-                    if (x == 7 && y == a)
-                    {
-                        if (figures[x, y - 1].site != Site.White && figures[x, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
-                        if (figures[x, y + 1].site != Site.White && figures[x, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                        if (figures[x - 1, y - 1].site != Site.White &&
-                            figures[x - 1, y - 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                        if (figures[x - 1, y + 1].site != Site.White &&
-                            figures[x - 1, y + 1].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                        if (figures[x - 1, y].site != Site.White && figures[x - 1, y].condition == Condition.NotFigure)
-                            AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                    }
-
-                if (figures[x = 0, y = 0].site != Site.White)
+                if (y >= 1 && y <= 6)
                 {
-                    if (figures[x + 1, y].site != Site.White && figures[x + 1, y].condition == Condition.NotFigure)
+                    if (figures[x, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x + 1, y].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    if (figures[x + 1, y + 1].site != Site.White &&
-                        figures[x + 1, y + 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
-                    if (figures[x, y + 1].site != Site.White && figures[x, y + 1].condition == Condition.NotFigure)
+                    if (figures[x, y + 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                }
-
-                if (figures[x = 7, y = 0].site != Site.White)
-                {
-                    if (figures[x - 1, y].site != Site.White && figures[x - 1, y].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                    if (figures[x - 1, y + 1].site != Site.White &&
-                        figures[x - 1, y + 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
-                    if (figures[x, y + 1].site != Site.White && figures[x, y + 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
-                }
-
-                if (figures[x = 0, y = 7].site != Site.White)
-                {
-                    if (figures[x + 1, y].site != Site.White && figures[x + 1, y].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
-                    if (figures[x + 1, y - 1].site != Site.White &&
-                        figures[x + 1, y - 1].condition == Condition.NotFigure)
+                    if (figures[x + 1, y - 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
-                    if (figures[x, y - 1].site != Site.White && figures[x, y - 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x + 1, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
                 }
+            }
 
-                if (figures[x = 7, y = 7].site != Site.White)
+            if (x == 7 && y != 0 && y != 7)
+            {
+                if (y >= 1 && y <= 6)
                 {
-                    if (figures[x - 1, y].site != Site.White && figures[x - 1, y].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
-                    if (figures[x - 1, y - 1].site != Site.White &&
-                        figures[x - 1, y - 1].condition == Condition.NotFigure)
-                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
-                    if (figures[x, y - 1].site != Site.White && figures[x, y - 1].condition == Condition.NotFigure)
+                    if (figures[x, y - 1].site != site)
                         AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                    if (figures[x - 1, y].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
+                    if (figures[x, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
+                    if (figures[x - 1, y - 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
+                    if (figures[x - 1, y + 1].site != site)
+                        AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
                 }
+            }
+
+            if (x >= 1 && x <= 6 && y >= 1 && y <= 6)
+            {
+                if (figures[x, y - 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y - 100));
+                if (figures[x - 1, y].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y));
+                if (figures[x, y + 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X, CurrPosition.Y + 100));
+                if (figures[x - 1, y - 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y - 100));
+                if (figures[x - 1, y + 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X - 100, CurrPosition.Y + 100));
+                if (figures[x + 1, y].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y));
+                if (figures[x + 1, y - 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y - 100));
+                if (figures[x + 1, y + 1].site != site)
+                    AvailablePoints.Add(new Point(CurrPosition.X + 100, CurrPosition.Y + 100));
+
             }
         }
 
@@ -1278,10 +1249,15 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                         Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                     Controller.form.Controls.Remove(image);
+                    if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                    {
+                        GameEnd();
+                    }
                     Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                     Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                     Controller.IsWhiteTurn = false;
+                    Controller.label.Text = "Ход черных";
                 }
             }
             else
@@ -1299,10 +1275,15 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition != Condition.NotFigure)
                             Controller.form.Controls.Remove(Controller.FieldOfFigures[newX, newY].image);
                         Controller.form.Controls.Remove(image);
+                        if (Controller.FieldOfFigures[newX, newY].condition == Condition.King)
+                        {
+                            GameEnd();
+                        }
                         Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
                         Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
                         Controller.IsWhiteTurn = true;
+                        Controller.label.Text = "Ход белых";
                     }
                 }
             }
@@ -1319,6 +1300,30 @@ namespace Chess
 
         public virtual void UpdateList(Figure[,] figures)
         {
+        }
+
+        public void GameEnd()
+        {
+            if (site == Site.Black)
+            {
+                Controller.EndGameText.Text = "Победа черных";
+            }
+
+            if (site == Site.White)
+            {
+                Controller.EndGameText.Text = "Победа белых";
+            }
+
+            Controller.EndGameText.Show();
+            Timer timer=new Timer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = 2000;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
     }
 }
