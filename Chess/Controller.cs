@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Forms;
 using Chess.Properties;
@@ -106,7 +107,7 @@ namespace Chess
         }
     }
 
-    public class Soldier : Figure
+    public partial class Soldier : Figure
     {
         public Soldier(Site site, Point position)
         {
@@ -180,7 +181,7 @@ namespace Chess
             }
         } //метод, который позволяет получить текущий лист доступных ходов
 
-        public void Image_Click(object sender, EventArgs e)
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -198,7 +199,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -221,7 +222,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Soldier(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -230,7 +231,7 @@ namespace Chess
         }
     }
 
-    public class Horse : Figure
+    public partial class Horse : Figure
     {
         public Horse(Site site, Point position)
         {
@@ -560,7 +561,7 @@ namespace Chess
             }
         }
 
-        public void Image_Click(object sender, EventArgs e)
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -578,7 +579,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -601,7 +602,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Horse(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -610,7 +611,7 @@ namespace Chess
         }
     }
 
-    public class Officer : Figure
+    public partial class Officer : Figure
     {
         public Officer(Site site, Point position)
         {
@@ -694,7 +695,7 @@ namespace Chess
             }
         }
 
-        public void Image_Click(object sender, EventArgs e)
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -712,7 +713,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -735,7 +736,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Officer(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -744,7 +745,7 @@ namespace Chess
         }
     }
 
-    public class Rook : Figure
+    public partial class Rook : Figure
     {
         public Rook(Site site, Point position)
         {
@@ -817,7 +818,9 @@ namespace Chess
             }
         }
 
-        public void Image_Click(object sender, EventArgs e)
+        
+
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -835,7 +838,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -858,7 +861,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Rook(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -867,7 +870,7 @@ namespace Chess
         }
     }
 
-    public class Queen : Figure
+    public partial class Queen : Figure
     {
         public Queen(Site site, Point position)
         {
@@ -1001,7 +1004,9 @@ namespace Chess
             }
         }
 
-        public void Image_Click(object sender, EventArgs e)
+        
+
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -1019,7 +1024,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -1042,7 +1047,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new Queen(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -1051,7 +1056,7 @@ namespace Chess
         }
     }
 
-    public class King : Figure
+    public partial class King : Figure
     {
         public King(Site site, Point position)
         {
@@ -1198,7 +1203,8 @@ namespace Chess
             }
         }
 
-        public void Image_Click(object sender, EventArgs e)
+
+        public void Move()
         {
             if (Controller.IsWhiteTurn && site == Site.White)
             {
@@ -1216,7 +1222,7 @@ namespace Chess
                     if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                     Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                     Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                    Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                    Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                     Controller.IsWhiteTurn = false;
                     Controller.label.Text = "Ход черных";
                 }
@@ -1239,7 +1245,7 @@ namespace Chess
                         if (Controller.FieldOfFigures[newX, newY].condition == Condition.King) GameEnd();
                         Controller.FieldOfFigures[newX, newY] = new King(site = site, AvailablePoints[rnd]);
                         Controller.form.Controls.Add(Controller.FieldOfFigures[newX, newY].image);
-                        Controller.FieldOfFigures[x, y] = new Figure {condition = Condition.NotFigure};
+                        Controller.FieldOfFigures[x, y] = new Figure { condition = Condition.NotFigure };
                         Controller.IsWhiteTurn = true;
                         Controller.label.Text = "Ход белых";
                     }
@@ -1269,7 +1275,7 @@ namespace Chess
             Controller.EndGameText.Show();
             var timer = new Timer();
             timer.Tick += Timer_Tick;
-            timer.Interval = 2000;
+            timer.Interval = 5000;
             timer.Start();
         }
 
